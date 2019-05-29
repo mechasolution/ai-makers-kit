@@ -114,9 +114,33 @@ def get_voice_and_speech(text):
     print('음성이 출력되었습니다.')
   else:
     print('에러가 발생하였습니다.')
-    
+
+def query_by_text(text):
+  stub = get_grpc_stub()
+
+  message = gigagenieRPC_pb2.reqQueryText()
+  message.queryText = text
+  message.userSession = "1234"
+  message.deviceId = "yourdevice"
+		
+  response = stub.queryByText(message)
+
+  print ("\n\nresultCd: %d" % (response.resultCd))
+  if response.resultCd == 200:
+  	print ("\n\n\n질의한 내용: %s" % (response.uword))
+  	for action in response.action:
+  		query_response = action.mesg
+
+  	query_response = query_response.replace('<![CDATA[', '').replace(']]>', '')
+  	return query_response
+  else:
+  	return None
+  
 
 if __name__ == '__main__':
-    detect_wake_up_word()
-    result = get_text_from_voice()
+    # detect_wake_up_word()
+    # result = get_text_from_voice()
+    # get_voice_and_speech(result)
+    result = query_by_text('안녕')
+    print(result)
     get_voice_and_speech(result)
