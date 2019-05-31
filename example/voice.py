@@ -30,10 +30,10 @@ def detect_wake_up_word(keyword = '기가지니'):
     return False
         
   response_code = ktkws.init("../data/kwsmodel.pack")  
-  print ('response_code on init = %d' % (response_code))  
+  print('response_code on init = %d' % (response_code))  
   response_code = ktkws.start()  
-  print ('response_code on start = %d' % (response_code))  
-  print ('\n호출어를 불러보세요~\n')  
+  print('response_code on start = %d' % (response_code))  
+  print('\n호출어를 불러보세요~\n')  
   ktkws.set_keyword(KWS_KEYWORDS.index(keyword))
   
   with MS.MicrophoneStream(RATE, CHUNK) as stream:  
@@ -44,7 +44,7 @@ def detect_wake_up_word(keyword = '기가지니'):
   
       if (response_code == 1):  
         MS.play_file("../data/sample_sound.wav")
-        print ('\n\n호출어가 정상적으로 인식되었습니다.\n\n')  
+        print('\n\n호출어가 정상적으로 인식되었습니다.\n\n')  
         ktkws.stop()
         return True
 
@@ -58,13 +58,13 @@ def generate_request():
       yield message
 
 def get_grpc_stub():
-  channel = grpc.secure_channel('{}:{}'.format(HOST, PORT), UA.getCredentials())
+  channel = grpc.secure_channel('%s:%s' % (HOST, PORT), UA.getCredentials())
   stub = gigagenieRPC_pb2_grpc.GigagenieStub(channel)
 
   return stub
 
 def get_text_from_voice():
-  print ("\n\n음성인식을 시작합니다.\n\n종료하시려면 Ctrl+\ 키를 누루세요.\n\n\n")
+  print("\n\n음성인식을 시작합니다.\n\n종료하시려면 Ctrl+\ 키를 누루세요.\n\n\n")
   stub = get_grpc_stub()
   request = generate_request()
   resultText = ''
@@ -84,21 +84,21 @@ def get_text_from_voice():
           % (response.resultCd, response.recognizedText))
       break
 
-  print ("\n\n최종 인식 결과: %s \n\n\n" % (resultText))
+  print("\n\n최종 인식 결과: %s \n\n\n" % (resultText))
   return resultText
 
 def get_voice_from_text(text, output_file_name = 'tts.wav'):
   stub = get_grpc_stub()
 
   message = gigagenieRPC_pb2.reqText()
-  message.lang = 1
+  message.lang = 0
   message.mode = 0
   message.text = text
 
   with open(output_file_name, 'wb') as output:
     for response in stub.getText2VoiceStream(message):
       result_code = response.resOptions.resultCd
-      print ("\n\n음성합성 응답 상태코드:", result_code)
+      print("\n\n음성합성 응답 상태코드:", result_code)
 
       if result_code == 200 or result_code == 0:
         output.write(response.audioContent)
@@ -107,7 +107,7 @@ def get_voice_from_text(text, output_file_name = 'tts.wav'):
 
   return True
 
-def get_voice_and_speech(text):
+def speech(text):
   result_code = get_voice_from_text(text)
   if result_code:
     MS.play_file('tts.wav')
@@ -125,9 +125,9 @@ def query_by_text(text):
 		
   response = stub.queryByText(message)
 
-  print ("\n\nresultCd: %d" % (response.resultCd))
+  print("\n\nresultCd: %d" % (response.resultCd))
   if response.resultCd == 200:
-  	print ("\n\n\n질의한 내용: %s" % (response.uword))
+  	print("\n\n\n질의한 내용: %s" % (response.uword))
   	for action in response.action:
   		query_response = action.mesg
 
@@ -138,9 +138,8 @@ def query_by_text(text):
   
 
 if __name__ == '__main__':
-    # detect_wake_up_word()
-    # result = get_text_from_voice()
-    # get_voice_and_speech(result)
-    result = query_by_text('안녕')
-    print(result)
-    get_voice_and_speech(result)
+    if detect_wake_up_word():
+      recognized_text = get_text_from_voice()
+      result = query_by_text(recognized_text)
+      print(result)
+      speech(result)
