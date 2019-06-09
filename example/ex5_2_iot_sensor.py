@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import voice
-broker_address="192.168.30.65"
+broker_address="xxx.xxx.xxx.xxx"
 
 recv_message = None
 # subscriber 콜백함수

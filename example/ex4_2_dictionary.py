@@ -26,7 +26,7 @@ def main():
         voice.speech('%s에 관한 뜻을 찾지 못했어요.' % word)
     else:
         voice.speech('사전에서 찾은 검색결과입니다. %s' % meanings[0])
-    
+
 
 if __name__ == "__main__":
     main()

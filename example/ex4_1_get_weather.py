@@ -4,7 +4,7 @@ import map
 
 def get_weather_by_code(code):
     api_url = "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=%s"
-    app_id = "7e4ce0b05622c372120a3f66e79b5355"
+    app_id = "사용자의 API카를 입력해주세요"
     unit = "metric"	# 미터법을 이용하겠다 명시
 
     response = requests.get(api_url % (code, app_id, unit))
@@ -15,7 +15,7 @@ def get_weather_by_code(code):
 
 def get_weather_by_coord(lat, lon):
     api_url = "https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=%s"
-    app_id = "7e4ce0b05622c372120a3f66e79b5355"
+    app_id = "사용자의 API카를 입력해주세요"
     unit = "metric"	# 미터법을 이용하겠다 명시
 
     response = requests.get(api_url % (lat, lon, app_id, unit))

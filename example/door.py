@@ -1,30 +1,30 @@
 class Door:
     total_open_count = 0
-    
+
     def __init__(self, location, color, is_locked, is_open):
         self.location = location
         self.color = color
         self.is_locked = is_locked
         self.is_open = is_open
         print("인스턴스가 초기화 되었습니다!")
-    
+
     def open(self):
         print("%s 문을 엽니다" % self.location)
         self.is_open = True
         Door.total_open_count = Door.total_open_count + 1
-    
+
     def close(self):
         print("%s 문을 닫습니다" % self.location)
         self.is_open = False
-    
+
     def lock(self):
         print("%s 문을 잠금니다" % self.location)
         self.is_locked = True
-    
+
     def unlock(self):
         print("%s 문을 잠금 해제합니다" % self.location)
         self.is_locked = False
-    
+
     def set_location(self, location):
         if location == "산속":
             return

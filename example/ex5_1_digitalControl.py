@@ -30,7 +30,7 @@ def get_target_status(input_text):
     return None
 
 def main() :
-  #voice.speech("조명을 제어합니다. 켜줘 또는 꺼줘로 제어해보세요")
+  voice.speech("조명을 제어합니다. 켜줘 또는 꺼줘로 제어해보세요")
   input_text = voice.get_text_from_voice() # TTS를 실행하여 텍스트를 받아옵니다.
   result_target = get_target_status(input_text) # 입력된 텍스트를 입력해 명령을 구분합니다.
   # 구분된 명령을 발행하고 결과를 받아옵니다.
